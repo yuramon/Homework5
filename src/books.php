@@ -20,7 +20,7 @@ function books()
         'q' => $request->get('q', null),
         'sort' => $request->get('sort', 'date'),
         'tag' => $request->get('tag', null),
-        'length' => BOOKS_PER_PAGE,
+        'limit' => BOOKS_PER_PAGE,
         'offset' => ceil((int)$request->get('page', 0) * BOOKS_PER_PAGE),
     ];
 
@@ -54,7 +54,7 @@ function filterByCriteria(array $criteria)
         'q' => null,
         'tag' => null,
         'sort' => null,
-        'length' => 3,
+        'limit' => 3,
         'offset' => 0,
         'total' => 0
     ], $criteria);
@@ -97,6 +97,6 @@ function filterByCriteria(array $criteria)
 
     return [
         'criteria' => $criteria,
-        'books' => array_slice($books, $criteria['offset'], $criteria['length']),
+        'books' => array_slice($books, $criteria['offset'], $criteria['limit']),
     ];
 }
