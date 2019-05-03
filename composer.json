@@ -1,6 +1,9 @@
 {
     "require": {
-        "symfony/http-foundation": "^4.2"
+        "symfony/http-foundation": "^4.2",
+        "ext-pdo": "*",
+        "doctrine/migrations": "^2.0",
+        "fzaninotto/faker": "^1.8"
     },
     "autoload": {
         "files": [

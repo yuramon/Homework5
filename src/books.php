@@ -5,12 +5,14 @@ namespace src\index;
 use function core\view\view;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use PDO;
 
 const BOOKS_PER_PAGE = 2;
 
 /**
  * @return Response
  */
+
 function books()
 {
     /** @var Request $request */
@@ -49,7 +51,6 @@ function bookById($id)
 function filterByCriteria(array $criteria)
 {
     global $app;
-
     $criteria = array_merge([
         'q' => null,
         'tag' => null,
@@ -58,11 +59,30 @@ function filterByCriteria(array $criteria)
         'offset' => 0,
         'total' => 0
     ], $criteria);
+    $newArr = [];
 
-    $books = $app['books'];
+    try {
+        $books = $app['books'];
+        $con = $books->query('SELECT * FROM books');
+        $con->setFetchMode(PDO::FETCH_ASSOC);
+        foreach ($con as $row) {
+
+            //print_r($row);
+            if (!in_array($row, $newArr)) {
+                array_push($newArr, $row);
+            }
+        }
+    } catch (PDOException $e) {
+        print "Error !! " . $e->getMessage() . "<br />";
+        die();
+    };
+    $books = $newArr;
+
 
     if (!empty($criteria['id'])) {
         $id = $criteria['id'];
+        /*$con = $books -> query('SELECT id FROM books');
+        $result = $con -> fetch(PDO::FETCH_BOTH);*/
         $books = array_filter($books, function ($book) use ($id) {
             return $book['id'] == $id;
         });
@@ -100,3 +120,5 @@ function filterByCriteria(array $criteria)
         'books' => array_slice($books, $criteria['offset'], $criteria['limit']),
     ];
 }
+
+

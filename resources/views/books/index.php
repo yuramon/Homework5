@@ -6,7 +6,7 @@
     <div class="media">
         <div class="media-left">
             <a href="<?= \core\router\generate('book_by_id', ['id' => $book['id']]) ?>">
-                <img src="<?= $book['poster'] ?>" alt="<?= $book['name'] ?>" class="media-object">
+                <img src="<?= $book['poster'] ?>" alt="<?= $book['name'] ?>" class="media-object" width="300">
             </a>
         </div>
         <div class="media-body">
