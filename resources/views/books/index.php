@@ -37,6 +37,7 @@
 <nav class="text-center">
     <?php
     $pages = ceil($criteria['total'] / $criteria['limit']);
+
     $current = ($criteria['offset'] / $criteria['limit']);
     ?>
     <ul class="pagination">

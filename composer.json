@@ -3,11 +3,13 @@
         "symfony/http-foundation": "^4.2",
         "ext-pdo": "*",
         "doctrine/migrations": "^2.0",
-        "fzaninotto/faker": "^1.8"
+        "fzaninotto/faker": "^1.8",
+        "illuminate/database": "^5.8"
     },
     "autoload": {
         "files": [
-            "./core/kernel.php"
+            "./core/kernel.php",
+            "./src/Book.php"
         ]
     }
 }

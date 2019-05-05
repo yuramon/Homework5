@@ -3,33 +3,12 @@
 namespace src\index;
 
 use function core\view\view;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use PDO;
 
 const BOOKS_PER_PAGE = 2;
-
-/**
- * @return Response
- */
-
-function books()
-{
-    /** @var Request $request */
-    global $request;
-
-    $criteria = [
-        'q' => $request->get('q', null),
-        'sort' => $request->get('sort', 'date'),
-        'tag' => $request->get('tag', null),
-        'limit' => BOOKS_PER_PAGE,
-        'offset' => ceil((int)$request->get('page', 0) * BOOKS_PER_PAGE),
-    ];
-
-    $result = filterByCriteria($criteria);
-
-    return view(['default_layout.php', 'books/index.php'], $result);
-}
 
 /**
  * @param $id
@@ -38,87 +17,88 @@ function books()
  */
 function bookById($id)
 {
-    $book = current(filterByCriteria(['id' => $id])['books']);
-
-    return view(['default_layout.php', 'books/book_by_id.php'], compact('book'));
+    global $app;
+    $STH = $app['books']->prepare("SELECT * FROM books WHERE id = :id");
+    $STH->bindParam(':id', $id, PDO::PARAM_INT);
+    $STH->execute();
+    $books = $STH->fetchAll(PDO::FETCH_ASSOC);
+    return view(['default_layout.php', 'books/book_by_id.php'], ['books' => $books]);
 }
 
-/**
- * @param array $criteria
- *
- * @return array
- */
-function filterByCriteria(array $criteria)
+function test2(array $criteria)
 {
+    //$books = Book::all();
+    $count = Book::where('id', '>', 0)->count();
     global $app;
     $criteria = array_merge([
-        'q' => null,
-        'tag' => null,
-        'sort' => null,
         'limit' => 3,
         'offset' => 0,
         'total' => 0
     ], $criteria);
-    $newArr = [];
-
-    try {
-        $books = $app['books'];
-        $con = $books->query('SELECT * FROM books');
-        $con->setFetchMode(PDO::FETCH_ASSOC);
-        foreach ($con as $row) {
-
-            //print_r($row);
-            if (!in_array($row, $newArr)) {
-                array_push($newArr, $row);
-            }
-        }
-    } catch (PDOException $e) {
-        print "Error !! " . $e->getMessage() . "<br />";
-        die();
-    };
-    $books = $newArr;
-
-
-    if (!empty($criteria['id'])) {
-        $id = $criteria['id'];
-        /*$con = $books -> query('SELECT id FROM books');
-        $result = $con -> fetch(PDO::FETCH_BOTH);*/
-        $books = array_filter($books, function ($book) use ($id) {
-            return $book['id'] == $id;
-        });
-    }
-
+    $books = Book::take($criteria['limit'])->skip($criteria['offset'])->get();
     if (!empty($criteria['q'])) {
         $q = $criteria['q'];
-        $books = array_filter($books, function ($book) use ($q) {
-            return preg_match('/' . $q . '/i', $book['name']);
-        });
+        $books = Book::query()
+            ->where('name', 'LIKE', "%{$q}%")
+            ->orWhere('tags', 'LIKE', "%{$q}%");
+        $count = $books->count();
+        $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
-
-    if (!empty($criteria['tag'])) {
-        $tag = $criteria['tag'];
-        $books = array_filter($books, function ($book) use ($tag) {
-            return !empty($book['tags']) && in_array($tag, (array)$book['tags']);
-        });
-    }
-
     if (!empty($criteria['sort'])) {
-        $key = trim($criteria['sort'], '-');
-        $direction = substr($criteria['sort'], 0, 1) == '-' ? 1 : -1;
-        usort($books, function ($a, $b) use ($key, $direction) {
-            if (!array_key_exists($key, $a) || !array_key_exists($key, $b)) {
-                return 0;
-            }
-            return $a[$key] == $b[$key] ? 0 : ($a[$key] > $b[$key] ? 1 * $direction : -1 * $direction);
-        });
+        $books = Book::orderBy('name');
+        $count = $books->count();
+        $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
+    $criteria['total'] = $count;
+    /*$sql = "SELECT count(info) FROM books ";
+    $count = $app['books']->prepare($sql);
+    $count->execute();
+    $number_of_rows = $count->fetchColumn();*/
 
-    $criteria['total'] = sizeof($books);
 
+    /*$STH = $app['books']->prepare("SELECT * from books limit :page, :per_page");
+    $STH->bindParam(':page', $criteria['offset'], PDO::PARAM_INT);
+    $STH->bindParam(':per_page', $criteria['limit'], PDO::PARAM_INT);
+    $STH->execute();
+    $result = $STH->fetchAll(PDO::FETCH_ASSOC);*/
     return [
         'criteria' => $criteria,
-        'books' => array_slice($books, $criteria['offset'], $criteria['limit']),
+        'books' => $books
     ];
+
+
+}
+
+/**
+ * @return Response
+ */
+
+function testBook()
+{
+    /*global $request;
+    $testArr = [];
+    $pageNumber = ceil((int)$request->get('page', 0));
+    echo $pageNumber;
+    $book = Book::all();
+    foreach ($book as $books) {
+        $newArr = $books->name;
+        array_push($testArr, $newArr);
+
+    }
+    print_r($testArr);
+
+    return view(['default_layout.php', 'books/index.php'], $testArr);*/
+    global $request;
+    $criteria = [
+        'q' => $request->get('q', null),
+        'sort' => $request->get('sort', null),
+        'limit' => BOOKS_PER_PAGE,
+        'offset' => ceil((int)$request->get('page', 0) * BOOKS_PER_PAGE),
+    ];
+    $result = test2($criteria);
+    return view(['default_layout.php', 'books/index.php'], $result);
+
+
 }
 
 

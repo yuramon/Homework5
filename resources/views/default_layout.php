@@ -28,11 +28,15 @@
                 </div>
                 <button class="btn btn-default">Search</button>
             </form>
+
         </div>
     </div>
 </nav>
 
 <div class="container">
+    <form class="navbar-form navbar-right" action="<?= \core\router\generate('books') ?>">
+        <button class="btn btn-default" name="sort" value="Name">Sort</button>
+    </form>
     <?= $content ?>
 </div>
 
