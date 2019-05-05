@@ -45,9 +45,16 @@ function test2(array $criteria)
         $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
     if (!empty($criteria['sort'])) {
-        $books = Book::orderBy('name');
-        $count = $books->count();
-        $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
+        if ($criteria['sort'] == 'Name') {
+            $books = Book::orderBy('name');
+            $count = $books->count();
+            $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
+        } elseif ($criteria['sort'] == 'Price') {
+            $books = Book::orderBy('price');
+            $count = $books->count();
+            $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
+        }
+
     }
     $criteria['total'] = $count;
     /*$sql = "SELECT count(info) FROM books ";

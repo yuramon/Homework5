@@ -35,7 +35,9 @@
 
 <div class="container">
     <form class="navbar-form navbar-right" action="<?= \core\router\generate('books') ?>">
-        <button class="btn btn-default" name="sort" value="Name">Sort</button>
+        <button class="btn btn-default" name="sort" value="Name">SortName</button>
+        <button class="btn btn-default" name="sort" value="Price">SortPrice</button>
+
     </form>
     <?= $content ?>
 </div>
