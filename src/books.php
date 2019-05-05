@@ -19,7 +19,12 @@ function bookById($id)
     return view(['default_layout.php', 'books/book_by_id.php'], ['books' => $books]);
 }
 
-function test2(array $criteria)
+/**
+ * @param array $criteria
+ * @return array
+ */
+
+function filterByCriteria(array $criteria)
 {
 
 
@@ -51,45 +56,13 @@ function test2(array $criteria)
 
     }
     if (!empty($criteria['tags'])) {
-        //$idArr = [];
         $search = $criteria['tags'];
-        /*$books = Book::query()
-            ->where('tags_name', '!=', "")
-            ->get();
-        foreach ($books as $book) {
-            $tagArray = explode(", ", $book->tags_name);
-            for ($i = 0; $i < sizeof($tagArray); $i++) {
-                if ($tagArray[$i] == $search) {
-                    array_push($idArr, $book['id']);
-                }
-            }
-        }*/
         $books = Book::query()
             ->where('tags_name', 'LIKE', "%{$search}%");
         $count = $books->count();
         $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
-        /*for ($i = 0; $i < sizeof($idArr); $i++) {
-            $books = Book::query()
-                ->where('id', '=', "%{$idArr[0]}%")
-                ->get();
-            print_r($books);
-            return $books;
-        }*/
-
-
     }
     $criteria['total'] = $count;
-    /*$sql = "SELECT count(info) FROM books ";
-    $count = $app['books']->prepare($sql);
-    $count->execute();
-    $number_of_rows = $count->fetchColumn();*/
-
-
-    /*$STH = $app['books']->prepare("SELECT * from books limit :page, :per_page");
-    $STH->bindParam(':page', $criteria['offset'], PDO::PARAM_INT);
-    $STH->bindParam(':per_page', $criteria['limit'], PDO::PARAM_INT);
-    $STH->execute();
-    $result = $STH->fetchAll(PDO::FETCH_ASSOC);*/
     return [
         'criteria' => $criteria,
         'books' => $books
@@ -101,21 +74,8 @@ function test2(array $criteria)
 /**
  * @return Response
  */
-function testBook()
+function books()
 {
-    /*global $request;
-    $testArr = [];
-    $pageNumber = ceil((int)$request->get('page', 0));
-    echo $pageNumber;
-    $book = Book::all();
-    foreach ($book as $books) {
-        $newArr = $books->name;
-        array_push($testArr, $newArr);
-
-    }
-    print_r($testArr);
-
-    return view(['default_layout.php', 'books/index.php'], $testArr);*/
     global $request;
     $criteria = [
         'q' => $request->get('q', null),
@@ -124,7 +84,7 @@ function testBook()
         'limit' => BOOKS_PER_PAGE,
         'offset' => ceil((int)$request->get('page', 0) * BOOKS_PER_PAGE),
     ];
-    $result = test2($criteria);
+    $result = filterByCriteria($criteria);
     return view(['default_layout.php', 'books/index.php'], $result);
 
 

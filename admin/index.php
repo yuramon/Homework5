@@ -46,17 +46,6 @@ function test2(array $criteria)
 
     }
     $criteria['total'] = $count;
-    /*$sql = "SELECT count(info) FROM books ";
-    $count = $app['books']->prepare($sql);
-    $count->execute();
-    $number_of_rows = $count->fetchColumn();*/
-
-
-    /*$STH = $app['books']->prepare("SELECT * from books limit :page, :per_page");
-    $STH->bindParam(':page', $criteria['offset'], PDO::PARAM_INT);
-    $STH->bindParam(':per_page', $criteria['limit'], PDO::PARAM_INT);
-    $STH->execute();
-    $result = $STH->fetchAll(PDO::FETCH_ASSOC);*/
     return [
         'criteria' => $criteria,
         'books' => $books
@@ -71,25 +60,6 @@ function test2(array $criteria)
 
 function admin()
 {
-    /*global $request;
-    $testArr = [];
-    $pageNumber = ceil((int)$request->get('page', 0));
-    echo $pageNumber;
-    $book = Book::all();
-    foreach ($book as $books) {
-        $newArr = $books->name;
-        array_push($testArr, $newArr);
-
-    }
-
-    SELECT *
-FROM books
-INNER JOIN tags
-ON books.tags = tags.tags_id
-WHERE books.tags_name = 'php, laravel'
-    print_r($testArr);
-
-    return view(['default_layout.php', 'books/index.php'], $testArr);*/
     global $request;
     $criteria = [
         'q' => $request->get('q', null),

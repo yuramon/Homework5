@@ -36,6 +36,9 @@ function view(array $layouts, array $data = [])
     return new Response($content);
 }
 
+/**
+ * @return Response
+ */
 function view1()
 {
     global $app;
