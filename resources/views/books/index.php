@@ -1,8 +1,31 @@
-<div class="page-header">
+<form class="navbar-form " action="<?= \core\router\generate('books') ?>">
+    <label>
+        <input class="btn btn-default" type="checkbox" name="tags" value="php">
+    </label>php
+    <label>
+        <input class="btn btn-default" type="checkbox" name="tags" value="laravel">
+    </label>laravel
+    <label>
+        <input class="btn btn-default" type="checkbox" name="tags" value="sql">
+    </label>sql
+    <label>
+        <input class="btn btn-default" type="checkbox" name="tags" value="javascript">
+    </label>javascript
+    <input class="btn btn-default" type="submit" value="Send">
+</form>
+<form class="navbar-form navbar" action="<?= \core\router\generate('books') ?>">
+    <button class="btn btn-default" name="sort" value="Name">SortName</button>
+    <button class="btn btn-default" name="sort" value="Price">SortPrice</button>
+</form>
+
+
+<div class="page-header left">
+
     <h3>Books</h3>
 </div>
 
-<?php foreach ($books as $book): ?>
+
+<?php if (!empty($books)) foreach ($books as $book): ?>
     <div class="media">
         <div class="media-left">
             <a href="<?= \core\router\generate('book_by_id', ['id' => $book['id']]) ?>">
@@ -20,10 +43,10 @@
 
             <p><b>Date</b>: <?= date_format(date_create($book['date']),'d/m/Y') ?></p>
 
-            <?php if (isset($book['tags'])): ?>
+            <?php if (isset($book['tags_name'])): ?>
                 <p>
                     <b>Tags</b>:
-                    <?php foreach ((array)$book['tags'] as $tag): ?>
+                    <?php foreach ((array)explode(", ", $book['tags_name']) as $tag): ?>
                         <span class="label label-primary"><?= $tag ?></span>
                     <?php endforeach; ?>
                 </p>

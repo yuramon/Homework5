@@ -4,8 +4,6 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 require_once '../app/Db.php';
 require_once '../vendor/fzaninotto/faker/src/autoload.php';
-//require_once '../src/books.php';
-//require_once '../app/FakeBooks.php';
 $app = [
     'name' => 'Book Store',
 
@@ -19,8 +17,18 @@ $app = [
         'book_by_id' => [
             'path' => '/books/{id}.html',
             'file' => 'books.php',
-            'function' => 'src\\index\\testBook',
+            'function' => 'src\\index\\bookById',
         ],
+        'admin' => [
+            'path' => '/admin/login',
+            'file' => 'index.php',
+            'function' => 'admin\\index\\admin1',
+        ],
+        'tags_sort' => [
+            'path' => '/<',
+            'file' => 'books.php',
+            'function' => 'src\\index\\testBook'
+        ]
 
         /*
         'test' => [

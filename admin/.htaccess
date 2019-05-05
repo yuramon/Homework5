@@ -1,0 +1,19 @@
+Options -Indexes
+RewriteEngine on
+
+# Change '/pro/' if directory is renamed
+RewriteBase /var/www/html/2/admin
+
+# Change the '/pro/' portion of the condition if directory is renamed 
+RewriteCond %{REQUEST_URI} ^/var/www/html/2/admin(.+)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule ^(.+)$ admin/index.php?url=$1 [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]

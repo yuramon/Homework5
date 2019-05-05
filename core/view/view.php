@@ -35,3 +35,16 @@ function view(array $layouts, array $data = [])
 
     return new Response($content);
 }
+
+function view1()
+{
+    global $app;
+
+    $layout = 'books/admin.php';
+    ob_start();
+    include $app['kernel.view_dir'] . DIRECTORY_SEPARATOR . $layout;
+    $content = ob_get_contents();
+    ob_end_clean();
+
+    return new Response($content);
+}

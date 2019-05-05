@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 function handle(Request $request)
 {
-    initApp();
+    initApp($request);
 
     global $app;
 
@@ -35,9 +35,11 @@ function handle(Request $request)
     $file = $request->attributes->get('_file');
     $function = $request->attributes->get('_function');
     $params = $request->attributes->get('_params', []);
-
+    $dirName = explode("\\", $function);
+    if ($dirName[0] == 'admin') {
+        $app['kernel.src_dir'] = $app['kernel.admin_dir'];
+    }
     $path = $app['kernel.src_dir'] . DIRECTORY_SEPARATOR . $file;
-
     if (!is_file($path)) {
         throw new RuntimeException(sprintf("Couldn't find file %s", $path));
     }
@@ -59,14 +61,19 @@ function handle(Request $request)
 
 /**
  * Inits all required application variables
+ * @param Request $request
  */
-function initApp()
+function initApp(Request $request)
 {
     $rootDir = dirname(dirname(__FILE__));
+    $function = $request->attributes->get('_function');
+    echo $function;
     $config = [
         'kernel.root_dir' => $rootDir,
         'kernel.view_dir' => $rootDir . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'views',
         'kernel.src_dir' => $rootDir . DIRECTORY_SEPARATOR . 'src',
+        'kernel.admin_dir' => $rootDir . DIRECTORY_SEPARATOR . 'admin',
+
     ];
 
     if (!array_key_exists('app', $GLOBALS)) {

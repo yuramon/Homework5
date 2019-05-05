@@ -1,28 +1,23 @@
 <?php
 
-namespace src\index;
+namespace admin\index;
 
-use function core\view\view;
+use src\index\Book;
 use Symfony\Component\HttpFoundation\Response;
+use function core\view\view;
+use function core\view\view1;
 
 
 const BOOKS_PER_PAGE = 2;
 
 /**
- * @param $id
  *
- * @return Response
+ * @return array
  */
-function bookById($id)
-{
-    $books = Book::where('id', "=", $id)->get();
-    return view(['default_layout.php', 'books/book_by_id.php'], ['books' => $books]);
-}
+
 
 function test2(array $criteria)
 {
-
-
     $count = Book::where('id', '>', 0)->count();
     $criteria = array_merge([
         'limit' => 3,
@@ -34,7 +29,7 @@ function test2(array $criteria)
         $q = $criteria['q'];
         $books = Book::query()
             ->where('name', 'LIKE', "%{$q}%")
-            ->orWhere('tags_name', 'LIKE', "%{$q}%");
+            ->orWhere('tags', 'LIKE', "%{$q}%");
         $count = $books->count();
         $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
@@ -48,34 +43,6 @@ function test2(array $criteria)
             $count = $books->count();
             $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
         }
-
-    }
-    if (!empty($criteria['tags'])) {
-        //$idArr = [];
-        $search = $criteria['tags'];
-        /*$books = Book::query()
-            ->where('tags_name', '!=', "")
-            ->get();
-        foreach ($books as $book) {
-            $tagArray = explode(", ", $book->tags_name);
-            for ($i = 0; $i < sizeof($tagArray); $i++) {
-                if ($tagArray[$i] == $search) {
-                    array_push($idArr, $book['id']);
-                }
-            }
-        }*/
-        $books = Book::query()
-            ->where('tags_name', 'LIKE', "%{$search}%");
-        $count = $books->count();
-        $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
-        /*for ($i = 0; $i < sizeof($idArr); $i++) {
-            $books = Book::query()
-                ->where('id', '=', "%{$idArr[0]}%")
-                ->get();
-            print_r($books);
-            return $books;
-        }*/
-
 
     }
     $criteria['total'] = $count;
@@ -101,7 +68,8 @@ function test2(array $criteria)
 /**
  * @return Response
  */
-function testBook()
+
+function admin()
 {
     /*global $request;
     $testArr = [];
@@ -113,6 +81,12 @@ function testBook()
         array_push($testArr, $newArr);
 
     }
+
+    SELECT *
+FROM books
+INNER JOIN tags
+ON books.tags = tags.tags_id
+WHERE books.tags_name = 'php, laravel'
     print_r($testArr);
 
     return view(['default_layout.php', 'books/index.php'], $testArr);*/
@@ -120,7 +94,6 @@ function testBook()
     $criteria = [
         'q' => $request->get('q', null),
         'sort' => $request->get('sort', null),
-        'tags' => $request->get('tags', null),
         'limit' => BOOKS_PER_PAGE,
         'offset' => ceil((int)$request->get('page', 0) * BOOKS_PER_PAGE),
     ];
@@ -130,6 +103,10 @@ function testBook()
 
 }
 
-
-
-
+/**
+ * @return Response
+ */
+function admin1()
+{
+    return view(['books/admin.php']);
+}

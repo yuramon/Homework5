@@ -1,37 +1,39 @@
 <ol class="breadcrumb">
     <li><a href="<?= \core\router\generate('books') ?>">Books</a></li>
-    <li class="active"><?= $book['name'] ?></li>
+    <li class="active"><?= $books[0]['name'] ?></li>
 </ol>
 
 <div class="media">
     <div class="media-left">
-        <img src="<?= $book['poster'] ?>" alt="<?= $book['name'] ?>" class="media-object">
+        <img src="<?= $books[0]['poster'] ?>" alt="<?= $books[0]['name'] ?>" class="media-object">
 
         <div class="text-center" style="margin-top: 25px">
-            <a href="<?= $book['link'] ?>" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-info-sign"></span> See more</a>
+            <a href="<?= $books[0]['link'] ?>" class="btn btn-lg btn-success"><span
+                        class="glyphicon glyphicon-info-sign"></span> See more</a>
         </div>
     </div>
 
     <div class="media-body">
         <h2 class="media-heading">
-            <?= $book['name'] ?>
+            <?= $books[0]['name'] ?>
         </h2>
 
-        <p><b>Author</b>: <?= $book['author'] ?></p>
+        <p><b>Author</b>: <?= $books[0]['author'] ?></p>
 
-        <p><b>Price</b>: <span class="text-success" style="font-size: large"><?= sprintf("$ %01.2f", $book['price']) ?></span></p>
+        <p><b>Price</b>: <span class="text-success" style="font-size: large"><?= sprintf("$ %01.2f",
+                    $books[0]['price']) ?></span></p>
 
-        <p><b>Date</b>: <?= date_format(date_create($book['date']),'d/m/Y') ?></p>
+        <p><b>Date</b>: <?= date_format(date_create($books[0]['date']), 'd/m/Y') ?></p>
 
-        <?php if (isset($book['tags'])): ?>
+        <?php if (isset($books[0]['tags'])): ?>
             <p>
                 <b>Tags</b>:
-                <?php foreach ((array)$book['tags'] as $tag): ?>
+                <?php foreach ((array)$books[0]['tags'] as $tag): ?>
                     <span class="label label-primary"><?= $tag ?></span>
                 <?php endforeach; ?>
             </p>
         <?php endif; ?>
 
-        <?= $book['info'] ?>
+        <?= $books[0]['info'] ?>
     </div>
 </div>
