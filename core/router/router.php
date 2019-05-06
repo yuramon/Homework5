@@ -31,7 +31,7 @@ function matchRequest(Request $request)
         }
 
         $routePattern = buildRoutePattern($route);
-        $routeMethods = $route['methods'] ?? [Request::METHOD_GET];
+        $routeMethods = $route['methods'] ??[$method];
 
         if (preg_match($routePattern, $pathinfo, $matches) && in_array($method, $routeMethods)) {
             $request->attributes->add([

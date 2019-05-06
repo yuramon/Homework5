@@ -23,6 +23,7 @@ function handle(Request $request)
     initApp($request);
 
     global $app;
+    echo $request->attributes->has('_file');
 
     if (!$request->attributes->has('_file') || !$request->attributes->has('_function')) {
         try {

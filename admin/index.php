@@ -3,6 +3,7 @@
 namespace admin\index;
 
 use src\index\Book;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function core\view\view;
 use function core\view\view1;
@@ -29,7 +30,7 @@ function test2(array $criteria)
         $q = $criteria['q'];
         $books = Book::query()
             ->where('name', 'LIKE', "%{$q}%")
-            ->orWhere('tags', 'LIKE', "%{$q}%");
+            ->orWhere('tags_name', 'LIKE', "%{$q}%");
         $count = $books->count();
         $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
@@ -44,6 +45,13 @@ function test2(array $criteria)
             $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
         }
 
+    }
+    if (!empty($criteria['tags'])) {
+        $search = $criteria['tags'];
+        $books = Book::query()
+            ->where('tags_name', 'LIKE', "%{$search}%");
+        $count = $books->count();
+        $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
     $criteria['total'] = $count;
     return [
@@ -64,19 +72,24 @@ function admin()
     $criteria = [
         'q' => $request->get('q', null),
         'sort' => $request->get('sort', null),
+        'tags' => $request->get('tags', null),
         'limit' => BOOKS_PER_PAGE,
         'offset' => ceil((int)$request->get('page', 0) * BOOKS_PER_PAGE),
     ];
-    $result = test2($criteria);
-    return view(['default_layout.php', 'books/index.php'], $result);
+
+    $request = Request::createFromGlobals();
+    $pass = $request ->get('pas');
+    $login = $request ->get('name');
+    $result = view(['books/admin.php']);
+    if (isset($pass) and $pass =='123' and isset($login) and $login =='admin'){
+
+        $result = test2($criteria);
+        $result =view(['default_layout.php', 'books/index.php'], $result);
+    };
+    if ($pass !='123' or $login != 'admin') {
+        echo "Wrong login or password";
+    }
+    return $result;
 
 
-}
-
-/**
- * @return Response
- */
-function admin1()
-{
-    return view(['books/admin.php']);
 }

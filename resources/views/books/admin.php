@@ -1,66 +1,36 @@
-<a href="">
-    <form class="navbar-form navbar-right" action="<?= \core\router\generate('admin') ?>">
-    </form>
-    <html class="gr__pro_dwweb_ru" lang="ru">
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="UTF-8">
-        <title>Вход</title>
-        <style>
-            .form {
-                position: absolute;
-                width: 350px;
-                height: 250px;
-                border: 1px solid #b8b5b5;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #ffffff;
-                box-shadow: 0px 0px 3px 1px #b0b0b0;
-            }
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
+</head>
+<body>
 
-            form {
-                margin-top: 21px;
-            }
-
-            div.in {
-                display: block;
-                padding: 10px;
-                text-align: center;
-                border-bottom: 1px solid #c9d0d5;
-                width: 258px;
-                margin: auto;
-                margin-top: 19px;
-            }
-
-            input[type="text"], input[type="password"] {
-                margin-left: 10%;
-                margin-top: 17px;
-                width: 80%;
-            }
-
-            button {
-                width: 82%;
-                margin-left: 10%;
-                margin-top: 19px;
-            }
-
-            body {
-                background: #f2f2f259;
-            }
-        </style>
-        <meta id="Reverso_extension___elForCheckedInstallExtension" name="Reverso extension" content="2.2.188">
-    </head>
-    <body data-gr-c-s-loaded="true">
-    <div class="form">
-        <div class="in">Log IN</div>
-        <form action="" method="post">
-            <input type="text" name="name" placeholder="login" required=""><br>
-            <input type="password" name="pas" placeholder="password" required=""><br>
-            <button type="submit" name="send" value="1">log in</button>
-        </form>
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+        </div>
     </div>
 
-    </body>
-    </html>
+</nav>
+<hr>
 
+<form class="text-center" action="<?= \core\router\generate('admin1') ?>" method="post">
+    <div class="media "><b><big><i>Admin Panel</i></big></b></div>
+    <label>
+        <input type="text" name="name" placeholder="login" required="">
+    </label><br>
+    <label>
+        <input type="password" name="pas" placeholder="password" required="">
+    </label><br>
+    <button class="media" type="submit" name="send" value="1">log in</button>
+</form>
+</div>
+</body>
+</html>

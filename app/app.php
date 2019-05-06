@@ -22,6 +22,11 @@ $app = [
             'file' => 'index.php',
             'function' => 'admin\\index\\admin1',
         ],
+        'admin1' => [
+            'path' => '/admin/',
+            'file' => 'index.php',
+            'function' => 'admin\\index\\admin',
+        ],
     ],
 ];
 $capsule = new Capsule;
