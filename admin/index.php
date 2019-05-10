@@ -27,8 +27,9 @@ function bookById($id)
  */
 
 
-function test2(array $criteria)
+function filterByCriteriaAdmin(array $criteria)
 {
+
     $count = Book::where('id', '>', 0)->count();
     $criteria = array_merge([
         'limit' => 3,
@@ -77,7 +78,6 @@ function test2(array $criteria)
         $count = $books->count();
         $books = $books->take($criteria['limit'])->skip($criteria['offset'])->get();
     }
-    echo 'loh';
     $criteria['total'] = $count;
     return [
         'criteria' => $criteria,
@@ -110,16 +110,21 @@ function admin()
     $result = view(['books/admin.php']);
    /* $passs = Admin::where('id', 1)
         ->get(['pass']);*/
-    if (isset($_SESSION['admin']) and $_SESSION['admin'] === 'admin') {
+   //echo $_SESSION['admin'][0];
+    if (isset($_SESSION['admin']) and $_SESSION['admin'][0] == 'admin') {
+        $log_pass= [];
         $adm = Admin::all()
             ->where('id',1);
         foreach ($adm as $admin){
-            $login = $admin->login;
-            $passHesh = $admin->pass;
+            $loginBd = $admin->login;
+            $passBd= $admin->pass;
+            array_push($log_pass, $loginBd, $passBd);
         }
-        $tryPass = $pass;
-        if (password_verify($tryPass, $passHesh) === true) {
+        $tryPass = $_SESSION['admin'][1];
+        echo $pass;
+        if (password_verify($tryPass, $log_pass[1]) === true) {
             $pass = $tryPass;
+            $login = $log_pass[0];
         }
 
     }
@@ -139,12 +144,13 @@ function admin()
             array_push($log_pass, $loginBd, $passBd);
         }
         if (password_verify($pass, $log_pass[1]) === true and $login === $log_pass[0]) {
-            $_SESSION['admin'] = 'admin';
-            $result = test2($criteria);
+            $_SESSION['admin'] = ['admin',$pass];
+            $result = filterByCriteriaAdmin($criteria);
             $result = view(['default_layout_admin.php', 'books/index_admin.php'], $result);
         }
         if (isset($loginButton)) {
-            if ($pass !== $log_pass[1] or $login !== $log_pass[0]) {
+            echo $pass;
+            if (password_verify($pass, $log_pass[1]) !== true or $login !== $log_pass[0]) {
                 echo "Wrong login or password";
             }
         }

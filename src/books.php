@@ -19,6 +19,7 @@ function bookById($id)
     return view(['default_layout.php', 'books/book_by_id.php'], ['books' => $books]);
 }
 
+
 /**
  * @param array $criteria
  * @return array
