@@ -9,27 +9,27 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
 
-    <title><?= $app['name'] ?></title>
+    <title><?= $app['adminPanel'] ?></title>
 </head>
 <body>
 
 <nav class="navbar navbar-inverse">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="<?= \core\router\generate('books') ?>">
+            <a class="navbar-brand" href="<?= \core\router\generate('admin1') ?>">
                 <span class="glyphicon glyphicon-book"></span>
-                <?= $app['name'] ?>
+                <?= $app['adminPanel'] ?>
             </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-left" action="<?= \core\router\generate('books') ?>">
+            <form class="navbar-form navbar-left" action="<?= \core\router\generate('admin1') ?>">
                 <div class="form-group">
                     <input placeholder="Search" name="q" value="<?= isset($criteria['q']) ? $criteria['q'] : '' ?>" required class="form-control">
                 </div>
                 <button class="btn btn-default">Search</button>
             </form>
             <form class="navbar-form navbar-right" action="<?= \core\router\generate('admin1') ?>">
-                <button class="btn btn-default" name="log_out" value="log_out">Log IN</button>
+                <button class="btn btn-default" name="log_out" value="log_out">Log Out</button>
             </form>
 
         </div>

@@ -4,6 +4,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 $app = [
     'name' => 'Book Store',
+    'adminPanel' => 'Admin Panel',
 
     'routes' => [
         'books' => [
@@ -16,6 +17,11 @@ $app = [
             'path' => '/books/{id}.html',
             'file' => 'books.php',
             'function' => 'src\\index\\bookById',
+        ],
+        'book_by_id_admin' => [
+            'path' => '/admin/{id}.html',
+            'file' => 'index.php',
+            'function' => 'admin\\index\\bookById',
         ],
         'admin' => [
             'path' => '/admin/login',

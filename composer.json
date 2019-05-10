@@ -9,7 +9,8 @@
     "autoload": {
         "files": [
             "./core/kernel.php",
-            "./src/Book.php"
+            "./src/Book.php",
+            "./src/Admin.php"
         ]
     }
 }

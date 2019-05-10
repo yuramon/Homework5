@@ -14,6 +14,12 @@
     <div class="container">
         <div class="navbar-header">
         </div>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="<?= \core\router\generate('books') ?>">
+                <span class="glyphicon glyphicon-book"></span>
+                <?= $app['name'] ?>
+            </a>
+        </div>
         <div id="navbar" class="navbar-collapse collapse">
         </div>
     </div>
@@ -29,7 +35,7 @@
     <label>
         <input type="password" name="pas" placeholder="password" required="">
     </label><br>
-    <button class="media" type="submit" name="send" value="1">log in</button>
+    <button class="media" type="submit" name="send">log in</button>
 </form>
 </div>
 </body>
